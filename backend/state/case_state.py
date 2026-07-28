@@ -23,6 +23,7 @@ class CaseState(TypedDict):
 
     # Evidence Agent
     evidence_status: Optional[str]
+    missing_items: list[str]
 
     # Risk Agent
     risk_score: Optional[int]
