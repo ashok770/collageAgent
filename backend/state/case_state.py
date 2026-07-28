@@ -28,6 +28,7 @@ class CaseState(TypedDict):
     # Risk Agent
     risk_score: Optional[int]
     priority: Optional[str]
+    recommended_action: Optional[str]
 
     # Routing Agent
     assigned_department: Optional[str]
