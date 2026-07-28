@@ -1,17 +1,17 @@
 from langgraph.graph import StateGraph, START, END
 
 from state.case_state import CaseState
-from agents.intake import intake_agent
 
-# Create Graph
+from agents.intake import intake_agent
+from agents.classification import classification_agent
+
 builder = StateGraph(CaseState)
 
-# Add Nodes
 builder.add_node("intake", intake_agent)
+builder.add_node("classification", classification_agent)
 
-# Define Flow
 builder.add_edge(START, "intake")
-builder.add_edge("intake", END)
+builder.add_edge("intake", "classification")
+builder.add_edge("classification", END)
 
-# Compile Graph
 graph = builder.compile()

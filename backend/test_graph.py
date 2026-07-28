@@ -10,7 +10,12 @@ I never approved the transaction.
 
 result = graph.invoke(initial_state)
 
-print("\n========== FINAL STATE ==========\n")
+print("\n========== FINAL CASE STATE ==========\n")
 
 for key, value in result.items():
     print(f"{key}: {value}")
+
+print("\n========== AGENT TIMELINE ==========\n")
+
+for log in result["agent_logs"]:
+    print(log)
