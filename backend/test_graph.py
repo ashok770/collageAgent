@@ -5,6 +5,7 @@ initial_state = {
 Yesterday I lost ₹5000 from my SBI account through Google Pay.
 I never approved the transaction.
 """,
+    "reasoning": {},
     "agent_logs": []
 }
 

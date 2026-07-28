@@ -2,7 +2,7 @@ from typing import TypedDict, Optional
 
 
 class CaseState(TypedDict):
-    # Original Complaint
+    # Citizen Complaint
     complaint: str
 
     # Intake Agent
@@ -30,7 +30,7 @@ class CaseState(TypedDict):
     assigned_department: Optional[str]
 
     # Explainability
-    reasoning: Optional[str]
+    reasoning: dict
 
-    # Agent Timeline
+    # Timeline
     agent_logs: list[str]

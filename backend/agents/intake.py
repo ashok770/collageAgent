@@ -1,8 +1,8 @@
-from tools.llm import llm
 from prompts.intake_prompt import INTAKE_PROMPT
 from state.case_state import CaseState
 
-from utils.json_parser import parse_json
+from core.agent_executor import run_agent
+from utils.normalizer import normalize_amount
 from utils.logger import (
     log_header,
     log_section,
@@ -20,22 +20,22 @@ def intake_agent(state: CaseState):
     log_section("Citizen Complaint")
     log_data(complaint)
 
-    response = llm.invoke([
-        ("system", INTAKE_PROMPT),
-        ("human", complaint),
-    ])
+    data, raw_response = run_agent(
+        INTAKE_PROMPT,
+        complaint
+    )
 
     log_section("LLM Response")
-    log_data(response.content)
+    log_data(raw_response)
 
-    data = parse_json(response.content)
-
-    state["amount"] = data.get("amount")
+    state["amount"] = normalize_amount(
+        data.get("amount")
+    )
     state["bank_name"] = data.get("bank_name")
     state["fraud_type"] = data.get("fraud_type")
     state["transaction_channel"] = data.get("transaction_channel")
     state["transaction_date"] = data.get("transaction_date")
-    state["reasoning"] = data.get("reasoning")
+    state["reasoning"]["intake"] = data.get("reasoning")
 
     log_success("CaseState updated successfully.")
 

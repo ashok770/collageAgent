@@ -1,11 +1,8 @@
-from tools.llm import llm
-
 from prompts.classification_prompt import CLASSIFICATION_PROMPT
 
 from state.case_state import CaseState
 
-from utils.json_parser import parse_json
-
+from core.agent_executor import run_agent
 from utils.logger import (
     log_header,
     log_section,
@@ -35,22 +32,19 @@ Transaction Date: {state.get("transaction_date")}
     log_section("Structured Case")
     log_data(structured_case)
 
-    response = llm.invoke([
-        ("system", CLASSIFICATION_PROMPT),
-        ("human", structured_case),
-    ])
+    data, raw_response = run_agent(
+        CLASSIFICATION_PROMPT,
+        structured_case
+    )
 
     log_section("LLM Response")
-    log_data(response.content)
-
-    data = parse_json(response.content)
+    log_data(raw_response)
 
     state["category"] = data.get("category")
     state["assigned_department"] = data.get("assigned_department")
     state["classification_confidence"] = data.get("classification_confidence")
 
-    # overwrite reasoning with latest agent reasoning
-    state["reasoning"] = data.get("reasoning")
+    state["reasoning"]["classification"] = data.get("reasoning")
 
     state["agent_logs"].append(
         "✅ Classification Agent completed: Complaint classified successfully."
