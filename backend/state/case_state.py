@@ -33,6 +33,12 @@ class CaseState(TypedDict):
     # Routing Agent
     assigned_department: Optional[str]
 
+    # Workflow Agent
+    workflow_status: Optional[str]
+    next_action: Optional[str]
+    sla: Optional[str]
+    closure_status: Optional[str]
+
     # Explainability
     reasoning: dict
 
