@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import ComplaintForm from "./components/ComplaintForm";
 import ProgressTracker from "./components/ProgressTracker";
+
 import IntakeCard from "./components/IntakeCard";
 import ClassificationCard from "./components/ClassificationCard";
 import DuplicateCard from "./components/DuplicateCard";
@@ -11,70 +12,56 @@ import WorkflowCard from "./components/WorkflowCard";
 
 import { analyzeComplaint } from "./services/api";
 
+const AGENTS = [
+  "Intake",
+  "Classification",
+  "Duplicate",
+  "Evidence",
+  "Risk",
+  "Workflow",
+];
+
 function App() {
   const [result, setResult] = useState(null);
+
   const [loading, setLoading] = useState(false);
 
-  const [statuses, setStatuses] = useState({
-    intake: "waiting",
-    classification: "waiting",
-    duplicate: "waiting",
-    evidence: "waiting",
-    risk: "waiting",
-    workflow: "waiting",
-  });
+  const [completedAgents, setCompletedAgents] = useState([]);
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const [currentAgent, setCurrentAgent] = useState("");
 
-  const runPipeline = async () => {
-    const agents = [
-      "intake",
-      "classification",
-      "duplicate",
-      "evidence",
-      "risk",
-      "workflow",
-    ];
-
-    for (const agent of agents) {
-      setStatuses((prev) => ({
-        ...prev,
-        [agent]: "running",
-      }));
-
-      await delay(700);
-
-      setStatuses((prev) => ({
-        ...prev,
-        [agent]: "completed",
-      }));
-    }
-  };
+  const [visibleCards, setVisibleCards] = useState([]);
 
   const handleAnalyze = async (complaint) => {
+    setLoading(true);
+
+    setResult(null);
+
+    setCompletedAgents([]);
+
+    setVisibleCards([]);
+
+    setCurrentAgent("Intake");
+
     try {
-      setLoading(true);
-
-      // Reset everything
-      setResult(null);
-
-      setStatuses({
-        intake: "waiting",
-        classification: "waiting",
-        duplicate: "waiting",
-        evidence: "waiting",
-        risk: "waiting",
-        workflow: "waiting",
-      });
-
       const data = await analyzeComplaint(complaint);
 
-      await runPipeline();
+      for (let i = 0; i < AGENTS.length; i++) {
+        setCurrentAgent(AGENTS[i]);
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        setCompletedAgents((prev) => [...prev, AGENTS[i]]);
+
+        setVisibleCards((prev) => [...prev, AGENTS[i]]);
+      }
+
+      setCurrentAgent("");
 
       setResult(data);
     } catch (err) {
       console.error(err);
-      alert("Backend connection failed.");
+      alert("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -85,25 +72,38 @@ function App() {
       <div className="max-w-5xl mx-auto px-6 py-10">
         <h1 className="text-4xl font-bold text-center">AgentVerse</h1>
 
-        <p className="text-center text-gray-600 mt-2">
+        <p className="text-center text-gray-600 mt-2 mb-10">
           AI Multi-Agent Banking Fraud Grievance System
         </p>
 
         <ComplaintForm onAnalyze={handleAnalyze} loading={loading} />
 
-        <ProgressTracker statuses={statuses} />
+        <ProgressTracker
+          loading={loading}
+          currentAgent={currentAgent}
+          completedAgents={completedAgents}
+        />
 
-        {result && (
-          <>
-            <IntakeCard data={result} />
+        {result && visibleCards.includes("Intake") && (
+          <IntakeCard data={result} />
+        )}
 
-            <ClassificationCard data={result} />
-            <DuplicateCard data={result} />
-            <EvidenceCard data={result} />
-            <RiskCard data={result} />
+        {result && visibleCards.includes("Classification") && (
+          <ClassificationCard data={result} />
+        )}
 
-            <WorkflowCard data={result} />
-          </>
+        {result && visibleCards.includes("Duplicate") && (
+          <DuplicateCard data={result} />
+        )}
+
+        {result && visibleCards.includes("Evidence") && (
+          <EvidenceCard data={result} />
+        )}
+
+        {result && visibleCards.includes("Risk") && <RiskCard data={result} />}
+
+        {result && visibleCards.includes("Workflow") && (
+          <WorkflowCard data={result} />
         )}
       </div>
     </div>

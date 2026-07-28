@@ -1,92 +1,98 @@
 const agents = [
   {
-    key: "intake",
+    id: "Intake",
     icon: "📝",
-    title: "Intake Agent",
   },
   {
-    key: "classification",
+    id: "Classification",
     icon: "🏷️",
-    title: "Classification Agent",
   },
   {
-    key: "duplicate",
+    id: "Duplicate",
     icon: "🔍",
-    title: "Duplicate Agent",
   },
   {
-    key: "evidence",
+    id: "Evidence",
     icon: "📄",
-    title: "Evidence Agent",
   },
   {
-    key: "risk",
+    id: "Risk",
     icon: "⚠️",
-    title: "Risk Agent",
   },
   {
-    key: "workflow",
+    id: "Workflow",
     icon: "🚦",
-    title: "Workflow Agent",
   },
 ];
 
-export default function ProgressTracker({ statuses }) {
-  const getStatus = (status) => {
-    switch (status) {
-      case "completed":
-        return {
-          color: "bg-green-500",
-          text: "Completed",
-          textColor: "text-green-600",
-          icon: "✅",
-        };
-
-      case "running":
-        return {
-          color: "bg-yellow-400 animate-pulse",
-          text: "Processing...",
-          textColor: "text-yellow-600",
-          icon: "⏳",
-        };
-
-      default:
-        return {
-          color: "bg-gray-300",
-          text: "Waiting...",
-          textColor: "text-gray-500",
-          icon: "⚪",
-        };
-    }
-  };
-
+export default function ProgressTracker({
+  loading,
+  currentAgent,
+  completedAgents,
+}) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 mt-8">
-      <h2 className="text-2xl font-bold mb-2">🧠 AI Investigation Pipeline</h2>
+    <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+      <h2 className="text-3xl font-bold mb-2">🧠 AI Investigation Pipeline</h2>
 
-      <p className="text-gray-500 mb-8">
-        Complaint is being processed through six AI agents.
+      <p className="text-gray-600 mb-8">
+        Complaint is processed through six specialized AI agents.
       </p>
 
       <div className="space-y-6">
         {agents.map((agent) => {
-          const state = getStatus(statuses?.[agent.key]);
+          const completed = completedAgents.includes(agent.id);
+
+          const processing = loading && currentAgent === agent.id && !completed;
 
           return (
-            <div key={agent.key} className="flex items-center justify-between">
+            <div key={agent.id} className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="text-3xl">{agent.icon}</div>
+                <div
+                  className={`w-12 h-12 rounded-full flex items-center justify-center text-xl
+                  ${
+                    completed
+                      ? "bg-green-100"
+                      : processing
+                        ? "bg-yellow-100"
+                        : "bg-slate-100"
+                  }`}
+                >
+                  {agent.icon}
+                </div>
 
                 <div>
-                  <h3 className="font-semibold">{agent.title}</h3>
+                  <h3 className="font-semibold text-lg">{agent.id} Agent</h3>
 
-                  <p className={`text-sm ${state.textColor}`}>
-                    {state.icon} {state.text}
-                  </p>
+                  {completed ? (
+                    <p className="text-green-600 text-sm font-medium">
+                      ✅ Completed
+                    </p>
+                  ) : processing ? (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 border-2 border-yellow-500
+                                   border-t-transparent rounded-full animate-spin"
+                      />
+
+                      <span className="text-yellow-600 text-sm font-medium">
+                        Processing...
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-gray-400 text-sm">Waiting...</p>
+                  )}
                 </div>
               </div>
 
-              <div className={`w-4 h-4 rounded-full ${state.color}`}></div>
+              <div>
+                {completed ? (
+                  <div className="w-4 h-4 rounded-full bg-green-500" />
+                ) : processing ? (
+                  <div className="w-4 h-4 rounded-full bg-yellow-400 animate-pulse" />
+                ) : (
+                  <div className="w-4 h-4 rounded-full bg-gray-300" />
+                )}
+              </div>
             </div>
           );
         })}
