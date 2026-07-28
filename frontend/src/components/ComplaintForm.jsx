@@ -12,20 +12,63 @@ export default function ComplaintForm({ onAnalyze }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Digital Governance Complaint</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white rounded-2xl shadow-lg p-8 mt-8"
+    >
+      <h2 className="text-3xl font-bold text-slate-800">
+        📝 Describe Your Complaint
+      </h2>
+
+      <p className="text-slate-600 mt-3 leading-7">
+        Enter your banking fraud complaint below. Our AI agents can understand
+        complaints written in English, Hindi, Tamil, Telugu, and other Indian
+        languages.
+      </p>
 
       <textarea
-        rows="8"
-        placeholder="Describe your complaint..."
+        rows={7}
+        placeholder={`Example:
+
+Yesterday I lost ₹5000 from my SBI account through Google Pay.
+I never approved the transaction.`}
         value={complaint}
         onChange={(e) => setComplaint(e.target.value)}
+        className="
+          w-full
+          mt-6
+          p-4
+          rounded-xl
+          border
+          border-slate-300
+          resize-none
+          focus:outline-none
+          focus:ring-2
+          focus:ring-blue-500
+          text-slate-700
+          placeholder:text-slate-400
+        "
       />
 
-      <br />
-      <br />
-
-      <button type="submit">Analyze Complaint</button>
+      <button
+        type="submit"
+        className="
+          w-full
+          mt-6
+          bg-blue-600
+          hover:bg-blue-700
+          text-white
+          font-semibold
+          py-4
+          rounded-xl
+          transition-all
+          duration-200
+          shadow-md
+          hover:shadow-lg
+        "
+      >
+        🚀 Analyze Complaint
+      </button>
     </form>
   );
 }

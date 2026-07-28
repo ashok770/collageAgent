@@ -2,26 +2,37 @@ export default function ClassificationCard({ data }) {
   if (!data) return null;
 
   return (
-    <div>
-      <h2>🤖 Classification Agent</h2>
+    <div className="bg-white rounded-2xl shadow-lg p-8 mt-6">
+      <h2 className="text-2xl font-bold text-slate-800 mb-6">
+        🏷️ Classification Agent
+      </h2>
 
-      <p>
-        <strong>Category:</strong> {data.category}
-      </p>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="text-sm text-slate-500">Category</p>
+          <p className="font-semibold">{data.category}</p>
+        </div>
 
-      <p>
-        <strong>Department:</strong> {data.assigned_department}
-      </p>
+        <div>
+          <p className="text-sm text-slate-500">Department</p>
+          <p className="font-semibold">{data.assigned_department}</p>
+        </div>
 
-      <p>
-        <strong>Confidence:</strong> {data.classification_confidence}
-      </p>
+        <div>
+          <p className="text-sm text-slate-500">Confidence</p>
+          <p className="font-semibold">
+            {Math.round((data.classification_confidence || 0) * 100)}%
+          </p>
+        </div>
+      </div>
 
-      <p>
-        <strong>Reasoning:</strong>
-      </p>
+      <div className="mt-6">
+        <h3 className="font-semibold text-slate-800 mb-2">AI Reasoning</h3>
 
-      <p>{data.reasoning?.classification}</p>
+        <p className="text-slate-600 leading-7">
+          {data.reasoning?.classification}
+        </p>
+      </div>
     </div>
   );
 }
