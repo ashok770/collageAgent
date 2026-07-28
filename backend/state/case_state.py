@@ -18,6 +18,8 @@ class CaseState(TypedDict):
 
     # Duplicate Agent
     duplicate_score: Optional[float]
+    is_duplicate: Optional[bool]
+    similar_case: Optional[str]
 
     # Evidence Agent
     evidence_status: Optional[str]
