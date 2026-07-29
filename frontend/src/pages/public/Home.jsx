@@ -1,2 +1,5 @@
-import PagePlaceholder from "@/components/common/PagePlaceholder";
-export default function Home() { return <PagePlaceholder title="Home" description="Public landing page placeholder." />; }
+import CasePilotHero from "@/components/public/CasePilotHero";
+
+export default function Home() {
+  return <CasePilotHero />;
+}
