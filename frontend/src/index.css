@@ -1,5 +1,58 @@
+/* Global application styles.  Imported once from src/main.jsx. */
 @import "tailwindcss";
 
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172554;
+  background: #f8fafc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { min-height: 100%; margin: 0; }
+
 body {
-  font-family: "Inter", sans-serif;
+  min-width: 320px;
+  background: linear-gradient(145deg, #eff6ff 0%, #f8fafc 48%, #eef2ff 100%);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.site-nav, .topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1rem clamp(1.25rem, 4vw, 4rem); background: rgb(255 255 255 / 92%);
+  border-bottom: 1px solid #dbeafe; box-shadow: 0 1px 3px rgb(15 23 42 / 6%);
+}
+.brand { font-size: 1.25rem; font-weight: 800; letter-spacing: -.035em; color: #1e3a8a; }
+.site-nav__label, .topbar__label { color: #475569; font-size: .9rem; }
+.page-content { width: min(100% - 2.5rem, 1120px); margin: 0 auto; flex: 1; }
+.page-placeholder {
+  min-height: calc(100vh - 144px); display: grid; place-content: center; text-align: center;
+  padding: 4rem 1.5rem;
+}
+.page-placeholder__panel {
+  width: min(100%, 680px); padding: clamp(2rem, 6vw, 4.5rem); border: 1px solid #dbeafe;
+  border-radius: 1.25rem; background: rgb(255 255 255 / 88%); box-shadow: 0 20px 50px rgb(30 64 175 / 12%);
+}
+.page-placeholder h1 { margin: 0; color: #172554; font-size: clamp(2rem, 5vw, 3.75rem); letter-spacing: -.05em; }
+.page-placeholder p { max-width: 48ch; margin: 1rem auto 0; color: #64748b; font-size: 1.05rem; line-height: 1.7; }
+.site-footer { padding: 1.25rem clamp(1.25rem, 4vw, 4rem); color: #64748b; font-size: .875rem; text-align: center; border-top: 1px solid #dbeafe; }
+
+.dashboard { min-height: 100vh; display: grid; grid-template-columns: 240px minmax(0, 1fr); }
+.sidebar { padding: 1.5rem; color: #dbeafe; background: #172554; }
+.sidebar__title { margin: 0; color: white; font-size: 1.25rem; font-weight: 800; }
+.dashboard-main { min-width: 0; }
+.dashboard-main .page-placeholder { min-height: calc(100vh - 65px); }
+
+@media (max-width: 700px) {
+  .site-nav, .topbar { padding: 1rem 1.25rem; }
+  .site-nav__label { display: none; }
+  .page-content { width: 100%; }
+  .page-placeholder { min-height: calc(100vh - 134px); padding: 2rem 1.25rem; }
+  .dashboard { grid-template-columns: 1fr; }
+  .sidebar { padding: .9rem 1.25rem; }
+  .dashboard-main .page-placeholder { min-height: calc(100vh - 121px); }
 }
